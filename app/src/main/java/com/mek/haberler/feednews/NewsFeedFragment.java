@@ -1,4 +1,4 @@
-package com.mek.haberler;
+package com.mek.haberler.feednews;
 
 import android.support.v4.app.Fragment;
 
