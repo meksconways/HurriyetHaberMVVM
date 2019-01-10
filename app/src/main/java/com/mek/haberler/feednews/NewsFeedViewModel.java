@@ -1,8 +1,6 @@
 package com.mek.haberler.feednews;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
 import com.mek.haberler.feednews.NewsFeedModel.FeedNewsModel;
 import com.mek.haberler.networking.NewsApi;
@@ -10,6 +8,9 @@ import com.mek.haberler.util.Util;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

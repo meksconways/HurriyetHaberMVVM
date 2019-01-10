@@ -1,10 +1,11 @@
 package com.mek.haberler.home;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.mek.haberler.R;
 import com.mek.haberler.feednews.NewsFeedFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
