@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Haberler</string>
     <string name="api_error">Hürriyet Haberle İlgili Bağlantı Kurulamadı</string>
+
+    <array name="tab_name">
+        <item>Haberler</item>
+        <item>Galeri</item>
+        <item>Video</item>
+        <item>Yazarlar</item>
+        <item>Sonra Oku</item>
+    </array>
+
+
+
 </resources>

@@ -19,7 +19,7 @@ public interface NewsService {
     * Tüm Haberlerin 12 tanesini title-files-id olarak al
     *
     * */
-    @GET("articles?$select=Title,Files,Id&$expand=Files&$top=12")
+    @GET("articles?$select=Title,Files,Id&$expand=Files")
     Call<List<FeedNewsModel>> getAllNews(@Header("apikey") String apikey);
 
 

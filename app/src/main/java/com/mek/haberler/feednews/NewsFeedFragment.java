@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mek.haberler.R;
+import com.mek.haberler.home.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.mek.haberler.base.BaseFragment.ARGS_INSTANCE;
+
 public class NewsFeedFragment extends Fragment {
 
     @BindView(R.id.progressBar)
@@ -32,13 +35,31 @@ public class NewsFeedFragment extends Fragment {
     RecyclerView recyclerView;
     private Unbinder unbinder;
     private NewsFeedViewModel viewmodel;
-    Context context;
+    private Context context;
+
+    int fragCount;
+
+
+    public static NewsFeedFragment newInstance(int instance) {
+        Bundle args = new Bundle();
+        args.putInt(ARGS_INSTANCE, instance);
+        NewsFeedFragment fragment = new NewsFeedFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lay_news_feed,container,false);
         unbinder = ButterKnife.bind(this,view);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            fragCount = args.getInt(ARGS_INSTANCE);
+        }
+
         return view;
 
     }
@@ -55,14 +76,13 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-
-
-        // viewmodel = ViewModelProviders.AndroidViewModelFactory.getInstance(context).create(NewsFeedViewModel.class);
         viewmodel = ViewModelProviders.of(this).get(NewsFeedViewModel.class);
-
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        //noinspection ConstantConditions
+        ((MainActivity)getActivity()).updateToolbarTitle("Hürriyet Haber");
 
         observeViewModel();
     }
