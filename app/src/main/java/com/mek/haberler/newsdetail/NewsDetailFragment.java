@@ -55,6 +55,7 @@ public class NewsDetailFragment extends BaseFragment {
     private NewsDetailViewModel viewmodel;
     private String newsID;
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

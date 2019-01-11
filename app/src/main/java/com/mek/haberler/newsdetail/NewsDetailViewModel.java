@@ -7,6 +7,8 @@ import com.mek.haberler.networking.NewsApi;
 import com.mek.haberler.newsdetail.model.NewsDetailModel;
 import com.mek.haberler.util.Util;
 
+import javax.inject.Inject;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,6 +26,7 @@ public class NewsDetailViewModel extends ViewModel {
     private Call<NewsDetailModel> detailCall;
 
 
+    @Inject
     NewsDetailViewModel(){
     }
 

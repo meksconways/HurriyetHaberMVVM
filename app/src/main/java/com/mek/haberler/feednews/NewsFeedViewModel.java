@@ -8,6 +8,8 @@ import com.mek.haberler.util.Util;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -29,6 +31,7 @@ public class NewsFeedViewModel extends ViewModel {
         scrollToTop.setValue(data);
     }
 
+    @Inject
     NewsFeedViewModel(){
         fetchNews();
     }
