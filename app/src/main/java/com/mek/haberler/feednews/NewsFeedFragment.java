@@ -2,6 +2,7 @@ package com.mek.haberler.feednews;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.mek.haberler.newsdetail.NewsDetailViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,9 +49,7 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
         return fragment;
     }
 
-    /*
-    * News id yi taşımak için detailVM class ını 'ACTIVITY SCOPE' içinde tanımladık
-    * */
+
     @Override
     public void onNewsSelected(String newsID) {
 //        NewsDetailViewModel detailViewModel = ViewModelProviders.of(getActivity()).get(NewsDetailViewModel.class);
@@ -86,7 +86,7 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        viewmodel = ViewModelProviders.of(this).get(NewsFeedViewModel.class);
+        viewmodel = ViewModelProviders.of(getActivity()).get(NewsFeedViewModel.class);
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -125,6 +125,20 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
                 txt_errorMsg.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.GONE);
             }
+        });
+        viewmodel.getScrollTop().observe(this, isScroll -> {
+            Log.d( "----onCreate: ","isScroll");
+            if (recyclerView != null){
+                //noinspection ConstantConditions
+                if (!viewmodel.loading().getValue() && !viewmodel.getError().getValue()){
+                    if (isScroll){
+                        recyclerView.smoothScrollToPosition(0);
+                        viewmodel.setScroll(false);
+                    }
+                }
+            }
+
+
         });
     }
 

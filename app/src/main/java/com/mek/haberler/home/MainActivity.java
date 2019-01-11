@@ -1,6 +1,7 @@
 package com.mek.haberler.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -9,6 +10,7 @@ import com.mek.haberler.R;
 import com.mek.haberler.base.BaseActivity;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.feednews.NewsFeedFragment;
+import com.mek.haberler.feednews.NewsFeedViewModel;
 import com.mek.haberler.fragment.BookmarkFragment;
 import com.mek.haberler.fragment.GalleryFragment;
 import com.mek.haberler.fragment.VideoFragment;
@@ -16,8 +18,11 @@ import com.mek.haberler.fragment.WriterFragment;
 import com.mek.haberler.util.FragNavController;
 import com.mek.haberler.util.FragmentHistory;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +47,23 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
     private FragmentHistory fragmentHistory;
     MenuItem prevMenuItem;
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()) {
+
+
+            case android.R.id.home:
+
+
+                onBackPressed();
+                return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +90,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
                 case R.id.act1:
                     switchTab(0);
                     fragmentHistory.push(0);
+
                     break;
                 case R.id.act2:
                     switchTab(1);
@@ -90,6 +112,44 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
             }
 
             return true;
+
+        });
+
+        bottomTabLayout.setOnNavigationItemReselectedListener(item -> {
+
+
+
+
+            switch (item.getItemId()){
+
+                case R.id.act1:
+                    switchTab(0);
+                    if (mNavController.isRootFragment()){
+                        NewsFeedViewModel viewModel = ViewModelProviders.of(this).get(NewsFeedViewModel.class);
+                        viewModel.setScroll(true);
+                    }
+                    mNavController.clearStack();
+                    Log.d( "----onCreate: ","reselect");
+
+                    break;
+                case R.id.act2:
+                    mNavController.clearStack();
+                    switchTab(1);
+                    break;
+                case R.id.act3:
+                    mNavController.clearStack();
+                    switchTab(2);
+                    break;
+                case R.id.act4:
+                    mNavController.clearStack();
+                    switchTab(3);
+                    break;
+                case R.id.act5:
+                    mNavController.clearStack();
+                    switchTab(4);
+                    break;
+
+            }
 
         });
 

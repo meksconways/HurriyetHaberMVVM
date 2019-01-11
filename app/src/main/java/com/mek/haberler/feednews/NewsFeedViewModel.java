@@ -21,13 +21,21 @@ public class NewsFeedViewModel extends ViewModel {
     private final MutableLiveData<List<FeedNewsModel>> news = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private final MutableLiveData<Boolean> newsLoadingError = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> scrollToTop = new MutableLiveData<>();
     private Call<List<FeedNewsModel>> newsCall;
 
+
+    public void setScroll(Boolean data){
+        scrollToTop.setValue(data);
+    }
 
     NewsFeedViewModel(){
         fetchNews();
     }
 
+    LiveData<Boolean> getScrollTop(){
+        return scrollToTop;
+    }
     LiveData<List<FeedNewsModel>> getNews(){
         return news;
     }
