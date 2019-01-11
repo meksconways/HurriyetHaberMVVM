@@ -1,7 +1,5 @@
 package com.mek.haberler.viewmodel;
 
-import com.mek.haberler.feednews.NewsFeedViewModel;
-
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -10,7 +8,6 @@ import javax.inject.Provider;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import dagger.Module;
 
 
 public class ViewModelFactory implements ViewModelProvider.Factory {

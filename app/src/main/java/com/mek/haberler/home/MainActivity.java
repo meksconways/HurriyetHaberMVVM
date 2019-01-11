@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseActivity;
 import com.mek.haberler.base.BaseFragment;
+import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.feednews.NewsFeedFragment;
 import com.mek.haberler.feednews.NewsFeedViewModel;
 import com.mek.haberler.fragment.BookmarkFragment;
@@ -17,11 +18,12 @@ import com.mek.haberler.fragment.VideoFragment;
 import com.mek.haberler.fragment.WriterFragment;
 import com.mek.haberler.util.FragNavController;
 import com.mek.haberler.util.FragmentHistory;
+import com.mek.haberler.viewmodel.ViewModelFactory;
 
-import androidx.annotation.NonNull;
+import javax.inject.Inject;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindArray;
 import butterknife.BindView;
@@ -47,6 +49,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
     private FragmentHistory fragmentHistory;
     MenuItem prevMenuItem;
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -70,6 +73,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         fragmentHistory = new FragmentHistory();
 
         setSupportActionBar(toolbar);

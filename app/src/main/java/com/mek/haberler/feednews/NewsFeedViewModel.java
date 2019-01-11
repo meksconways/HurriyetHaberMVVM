@@ -22,6 +22,7 @@ public class NewsFeedViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private final MutableLiveData<Boolean> newsLoadingError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> scrollToTop = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> refresh = new MutableLiveData<>(false);
     private final NewsService newsService;
     private Call<List<FeedNewsModel>> newsCall;
 
@@ -36,6 +37,9 @@ public class NewsFeedViewModel extends ViewModel {
         fetchNews();
     }
 
+    LiveData<Boolean> getRefresh(){
+        return refresh;
+    }
     LiveData<Boolean> getScrollTop(){
         return scrollToTop;
     }
@@ -49,8 +53,26 @@ public class NewsFeedViewModel extends ViewModel {
         return newsLoadingError;
     }
 
-    private void fetchNews() {
-        loading.setValue(true);
+
+    void setRefresh(Boolean data){
+        refresh.setValue(data);
+        if (data){
+            fetchNews();
+        }
+    }
+
+
+    private void fetchNews()
+    {
+
+        //noinspection ConstantConditions
+        if (!refresh.getValue()){
+            loading.setValue(true);
+
+        }else{
+            loading.setValue(false);
+        }
+
         newsCall = newsService.getAllNews(Util.API_KEY);
         newsCall.enqueue(new Callback<List<FeedNewsModel>>() {
             @Override
@@ -59,6 +81,7 @@ public class NewsFeedViewModel extends ViewModel {
                     newsLoadingError.setValue(false);
                     news.setValue(response.body());
                     loading.setValue(false);
+                    refresh.setValue(false);
                     newsCall = null;
                 }
 
@@ -68,6 +91,7 @@ public class NewsFeedViewModel extends ViewModel {
             public void onFailure(Call<List<FeedNewsModel>> call, Throwable t) {
                 loading.setValue(false);
                 newsLoadingError.setValue(true);
+                refresh.setValue(false);
                 newsCall = null;
             }
         });

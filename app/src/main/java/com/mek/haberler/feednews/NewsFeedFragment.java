@@ -19,9 +19,11 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -35,11 +37,14 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
     TextView txt_errorMsg;
     @BindView(R.id.rv_news)
     RecyclerView recyclerView;
+    @BindView(R.id.lyt_refresh)
+    SwipeRefreshLayout refreshLayout;
     private Unbinder unbinder;
     private NewsFeedViewModel viewmodel;
     private Context context;
 
     int fragCount;
+
 
 
     @Inject
@@ -68,6 +73,13 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lay_news_feed,container,false);
         unbinder = ButterKnife.bind(this,view);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                viewmodel.setRefresh(true);
+            }
+        });
 
         Bundle args = getArguments();
         if (args != null) {
@@ -142,6 +154,13 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
             }
 
 
+        });
+        viewmodel.getRefresh().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isRefresh) {
+                refreshLayout.setRefreshing(isRefresh);
+
+            }
         });
     }
 
