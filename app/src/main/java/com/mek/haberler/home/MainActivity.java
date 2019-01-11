@@ -16,15 +16,15 @@ import com.mek.haberler.fragment.WriterFragment;
 import com.mek.haberler.util.FragNavController;
 import com.mek.haberler.util.FragmentHistory;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements BaseFragment.FragmentNavigation, FragNavController.TransactionListener, FragNavController.RootFragmentListener {
+public class MainActivity extends BaseActivity implements BaseFragment.FragmentNavigation,
+        FragNavController.TransactionListener, FragNavController.RootFragmentListener {
+
 
     @BindView(R.id.screen_container)
     FrameLayout contentFrame;

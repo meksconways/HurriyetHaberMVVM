@@ -26,8 +26,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
 
     private final List<FeedNewsModel> data = new ArrayList<>();
+    private final NewsSelectedListener listener;
 
-    NewsFeedAdapter(NewsFeedViewModel viewModel, LifecycleOwner lifecycleOwner){
+    NewsFeedAdapter(NewsFeedViewModel viewModel, LifecycleOwner lifecycleOwner, NewsSelectedListener listener){
+        this.listener = listener;
         viewModel.getNews().observe(lifecycleOwner, newsList -> {
             data.clear();
             if (newsList != null){
@@ -49,7 +51,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default_news_card,parent,false);
-        return new NewsViewHolder(view);
+        return new NewsViewHolder(view,listener);
     }
 
     @Override
@@ -69,13 +71,20 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         @BindView(R.id.txt_news_title)
         TextView newsTitle;
 
-        NewsViewHolder(@NonNull View itemView) {
+        private FeedNewsModel model;
+
+        NewsViewHolder(@NonNull View itemView,NewsSelectedListener listener) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(v -> {
+                if (model != null) {
+                    listener.onNewsSelected(model.id);
+                }
+            });
         }
 
         void bind(FeedNewsModel newsModel){
-
+            this.model = newsModel;
             newsTitle.setText(newsModel.title);
             if (newsModel.files.size() > 0){
                 if (newsModel.files.get(0).fileUrl != null){

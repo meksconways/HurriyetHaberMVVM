@@ -9,23 +9,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mek.haberler.R;
+import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.home.MainActivity;
+import com.mek.haberler.newsdetail.NewsDetailFragment;
+import com.mek.haberler.newsdetail.NewsDetailViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.mek.haberler.base.BaseFragment.ARGS_INSTANCE;
 
-public class NewsFeedFragment extends Fragment {
+public class NewsFeedFragment extends BaseFragment implements NewsSelectedListener {
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -48,6 +47,17 @@ public class NewsFeedFragment extends Fragment {
         return fragment;
     }
 
+    /*
+    * News id yi taşımak için detailVM class ını 'ACTIVITY SCOPE' içinde tanımladık
+    * */
+    @Override
+    public void onNewsSelected(String newsID) {
+//        NewsDetailViewModel detailViewModel = ViewModelProviders.of(getActivity()).get(NewsDetailViewModel.class);
+//        detailViewModel.setSelectedNews(newsID);
+        if (mFragmentNavigation != null) {
+            mFragmentNavigation.pushFragment(NewsDetailFragment.newInstance(fragCount + 1,newsID));
+        }
+    }
 
     @Nullable
     @Override
@@ -78,7 +88,7 @@ public class NewsFeedFragment extends Fragment {
 
         viewmodel = ViewModelProviders.of(this).get(NewsFeedViewModel.class);
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this));
+        recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         //noinspection ConstantConditions
@@ -119,11 +129,13 @@ public class NewsFeedFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (unbinder != null) {
             unbinder.unbind();
             unbinder = null;
         }
     }
+
+
 }
