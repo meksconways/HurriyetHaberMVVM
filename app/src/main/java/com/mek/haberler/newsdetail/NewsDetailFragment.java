@@ -1,7 +1,9 @@
 package com.mek.haberler.newsdetail;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.home.MainActivity;
+import com.mek.haberler.util.Util;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,8 +118,12 @@ public class NewsDetailFragment extends BaseFragment {
             }
         });
         viewmodel.getDetail().observe(this, detail -> {
-            txt_newsDate.setText(detail.createdDate);
-            txt_newsDesc.setText(detail.description);
+            txt_newsDate.setText(Util.getDate(detail.createdDate));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                txt_newsDesc.setText(Html.fromHtml(detail.description, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                txt_newsDesc.setText(Html.fromHtml(detail.description));
+            }
             txt_newsOwner.setText(detail.editor);
             txt_newsTitle.setText(detail.title);
             txt_newsSubtitle.setText(detail.subTitle);

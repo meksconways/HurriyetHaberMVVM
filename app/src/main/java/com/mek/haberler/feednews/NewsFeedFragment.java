@@ -2,7 +2,6 @@ package com.mek.haberler.feednews;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,9 @@ import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.newsdetail.NewsDetailFragment;
-import com.mek.haberler.newsdetail.NewsDetailViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -127,7 +124,6 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
             }
         });
         viewmodel.getScrollTop().observe(this, isScroll -> {
-            Log.d( "----onCreate: ","isScroll");
             if (recyclerView != null){
                 //noinspection ConstantConditions
                 if (!viewmodel.loading().getValue() && !viewmodel.getError().getValue()){

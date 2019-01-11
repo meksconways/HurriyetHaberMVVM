@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 import androidx.core.content.ContextCompat;
 
 public class Util {
@@ -39,6 +41,38 @@ public class Util {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+
+
+    @SuppressLint("UseSparseArrays")
+    public static HashMap<Integer,String> month = new HashMap<>();
+
+    public static String getDate(String date){
+        createHashMap();
+        String ay = date.substring(5,7);
+        String gun = date.substring(8,10);
+        String yil = date.substring(0,4);
+        String saat = date.substring(11,16);
+        return gun+" "+month.get(Integer.parseInt(ay))+" "+yil+"-"+saat;
+
+    }
+
+    private static void createHashMap() {
+        if (month.size() == 0){
+            month.put(1,"Ocak");
+            month.put(2,"Şubat");
+            month.put(3,"Mart");
+            month.put(4,"Nisan");
+            month.put(5,"Mayıs");
+            month.put(6,"Haziran");
+            month.put(7,"Temmuz");
+            month.put(8,"Ağuston");
+            month.put(9,"Eylül");
+            month.put(10,"Ekim");
+            month.put(11,"Kasım");
+            month.put(12,"Aralık");
+        }
+
+    }
 
 
     @SuppressLint("HardwareIds")
