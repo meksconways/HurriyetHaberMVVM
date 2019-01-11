@@ -16,8 +16,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
+import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.util.Util;
+import com.mek.haberler.viewmodel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,11 +59,14 @@ public class NewsDetailFragment extends BaseFragment {
     private NewsDetailViewModel viewmodel;
     private String newsID;
 
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        MyApplication.getAppComponent(context).inject(this);
     }
 
     public static NewsDetailFragment newInstance(int instance,String news_id) {
@@ -88,7 +95,7 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewmodel = ViewModelProviders.of(this).get(NewsDetailViewModel.class);
+        viewmodel = ViewModelProviders.of(this,viewModelFactory).get(NewsDetailViewModel.class);
         if (newsID != null){
             viewmodel.setSelectedNews(newsID);
         }

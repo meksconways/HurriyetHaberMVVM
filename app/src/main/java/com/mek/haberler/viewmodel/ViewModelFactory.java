@@ -10,6 +10,8 @@ import javax.inject.Provider;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import dagger.Module;
+
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 

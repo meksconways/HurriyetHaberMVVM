@@ -22,4 +22,10 @@ public abstract class NetworkModule {
 
     }
 
+    @Provides
+    @Singleton
+    static NewsService provideNewsService(Retrofit retrofit){
+        return retrofit.create(NewsService.class);
+    }
+
 }

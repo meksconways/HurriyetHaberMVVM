@@ -1,9 +1,6 @@
 package com.mek.haberler.newsdetail;
 
-import android.os.Bundle;
-import android.util.Log;
-
-import com.mek.haberler.networking.NewsApi;
+import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.newsdetail.model.NewsDetailModel;
 import com.mek.haberler.util.Util;
 
@@ -19,6 +16,7 @@ import retrofit2.Response;
 public class NewsDetailViewModel extends ViewModel {
 
 
+    private final NewsService newsService;
     private MutableLiveData<NewsDetailModel> detail = new MutableLiveData<>();
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private MutableLiveData<Boolean> detailError = new MutableLiveData<>();
@@ -27,7 +25,8 @@ public class NewsDetailViewModel extends ViewModel {
 
 
     @Inject
-    NewsDetailViewModel(){
+    NewsDetailViewModel(NewsService newsService){
+        this.newsService = newsService;
     }
 
     public void setSelectedNews(String newsID){
@@ -46,9 +45,8 @@ public class NewsDetailViewModel extends ViewModel {
 
 
     public void fetchDetail(String news_id) {
-        Log.d( "----fetchDetail: ","oluştu");
         loading.setValue(true);
-        detailCall = NewsApi.getInstance().getNewsDetail(Util.API_KEY,news_id);
+        detailCall = newsService.getNewsDetail(Util.API_KEY,news_id);
         detailCall.enqueue(new Callback<NewsDetailModel>() {
             @Override
             public void onResponse(Call<NewsDetailModel> call, Response<NewsDetailModel> response) {

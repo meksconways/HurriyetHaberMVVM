@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
+import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.newsdetail.NewsDetailFragment;
+import com.mek.haberler.viewmodel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +41,9 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
 
     int fragCount;
 
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     public static NewsFeedFragment newInstance(int instance) {
         Bundle args = new Bundle();
@@ -78,12 +85,12 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        MyApplication.getAppComponent(context).inject(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        viewmodel = ViewModelProviders.of(getActivity()).get(NewsFeedViewModel.class);
+        viewmodel = ViewModelProviders.of(getActivity(),viewModelFactory).get(NewsFeedViewModel.class);
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

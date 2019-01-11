@@ -5,6 +5,10 @@ import com.mek.haberler.util.Util;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
+/*
+* Dagger 2 ekledikten sonra kullanmaya gerek kalmadı
+*
+* */
 public class NewsApi {
 
     private static Retrofit retrofit;

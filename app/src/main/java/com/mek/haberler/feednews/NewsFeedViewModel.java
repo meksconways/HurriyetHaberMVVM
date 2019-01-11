@@ -1,9 +1,7 @@
 package com.mek.haberler.feednews;
 
-import android.util.Log;
-
 import com.mek.haberler.feednews.NewsFeedModel.FeedNewsModel;
-import com.mek.haberler.networking.NewsApi;
+import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.util.Util;
 
 import java.util.List;
@@ -24,6 +22,7 @@ public class NewsFeedViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private final MutableLiveData<Boolean> newsLoadingError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> scrollToTop = new MutableLiveData<>();
+    private final NewsService newsService;
     private Call<List<FeedNewsModel>> newsCall;
 
 
@@ -32,7 +31,8 @@ public class NewsFeedViewModel extends ViewModel {
     }
 
     @Inject
-    NewsFeedViewModel(){
+    NewsFeedViewModel(NewsService newsService){
+        this.newsService = newsService;
         fetchNews();
     }
 
@@ -51,7 +51,7 @@ public class NewsFeedViewModel extends ViewModel {
 
     private void fetchNews() {
         loading.setValue(true);
-        newsCall = NewsApi.getInstance().getAllNews(Util.API_KEY);
+        newsCall = newsService.getAllNews(Util.API_KEY);
         newsCall.enqueue(new Callback<List<FeedNewsModel>>() {
             @Override
             public void onResponse(Call<List<FeedNewsModel>> call, Response<List<FeedNewsModel>> response) {
