@@ -37,7 +37,10 @@ public class GalleryFragmentAdapter extends RecyclerView.Adapter<GalleryFragment
         setHasStableIds(true);
     }
 
-
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @NonNull
     @Override
