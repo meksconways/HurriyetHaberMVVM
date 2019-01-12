@@ -35,10 +35,13 @@
         android:background="#d9d9d9"
         android:layout_above="@+id/bottom_nav"
         />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/menu_bottom_bar"
+        app:itemHorizontalTranslationEnabled="false"
+        app:labelVisibilityMode="labeled"
         android:layout_alignParentBottom="true"
         android:background="#ffffff"
         android:id="@+id/bottom_nav"

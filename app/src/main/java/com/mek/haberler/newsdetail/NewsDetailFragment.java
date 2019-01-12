@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -25,7 +26,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +55,7 @@ public class NewsDetailFragment extends BaseFragment {
     TextView txt_newsDate;
     @BindView(R.id.txt_news_desc)
     TextView txt_newsDesc;
+
     private Unbinder unbinder;
     private NewsDetailViewModel viewmodel;
     private String newsID;
@@ -127,6 +128,8 @@ public class NewsDetailFragment extends BaseFragment {
         });
         viewmodel.getDetail().observe(this, detail -> {
             txt_newsDate.setText(Util.getDate(detail.createdDate));
+
+           // webView.loadData(detail.description, "text/html; charset=UTF-8", null);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 txt_newsDesc.setText(Html.fromHtml(detail.description, Html.FROM_HTML_MODE_COMPACT));
             } else {

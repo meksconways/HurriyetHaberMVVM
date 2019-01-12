@@ -74,12 +74,7 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
         View view = inflater.inflate(R.layout.lay_news_feed,container,false);
         unbinder = ButterKnife.bind(this,view);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                viewmodel.setRefresh(true);
-            }
-        });
+        refreshLayout.setOnRefreshListener(() -> viewmodel.setRefresh(true));
 
         Bundle args = getArguments();
         if (args != null) {

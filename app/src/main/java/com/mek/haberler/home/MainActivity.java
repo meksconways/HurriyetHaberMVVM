@@ -1,7 +1,6 @@
 package com.mek.haberler.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -9,18 +8,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseActivity;
 import com.mek.haberler.base.BaseFragment;
-import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.feednews.NewsFeedFragment;
 import com.mek.haberler.feednews.NewsFeedViewModel;
 import com.mek.haberler.fragment.BookmarkFragment;
-import com.mek.haberler.fragment.GalleryFragment;
+import com.mek.haberler.gallerynews.GalleryFrViewModel;
+import com.mek.haberler.gallerynews.GalleryFragment;
 import com.mek.haberler.fragment.VideoFragment;
 import com.mek.haberler.fragment.WriterFragment;
 import com.mek.haberler.util.FragNavController;
 import com.mek.haberler.util.FragmentHistory;
-import com.mek.haberler.viewmodel.ViewModelFactory;
-
-import javax.inject.Inject;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -78,8 +74,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
 
         setSupportActionBar(toolbar);
 
-
-
         mNavController = FragNavController.newBuilder(savedInstanceState,
                 getSupportFragmentManager(),
                 R.id.screen_container)
@@ -113,6 +107,9 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
                     fragmentHistory.push(4);
                     break;
 
+                    default:
+                        return false;
+
             }
 
             return true;
@@ -120,9 +117,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
         });
 
         bottomTabLayout.setOnNavigationItemReselectedListener(item -> {
-
-
-
 
             switch (item.getItemId()){
 
@@ -133,10 +127,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
                         viewModel.setScroll(true);
                     }
                     mNavController.clearStack();
-                    Log.d( "----onCreate: ","reselect");
 
                     break;
                 case R.id.act2:
+                    if (mNavController.isRootFragment()){
+                        GalleryFrViewModel viewModel = ViewModelProviders.of(this).get(GalleryFrViewModel.class);
+                        viewModel.setScroll(true);
+                    }
                     mNavController.clearStack();
                     switchTab(1);
                     break;
