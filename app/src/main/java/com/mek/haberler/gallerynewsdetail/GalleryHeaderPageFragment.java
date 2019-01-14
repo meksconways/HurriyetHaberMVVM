@@ -16,20 +16,22 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.base.MyApplication;
+import com.mek.haberler.gallerynewsdetail.model.Files;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.viewmodel.ViewModelFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GalleryHeaderPageFragment extends BaseFragment {
+public class GalleryHeaderPageFragment extends BaseFragment implements GalleryClickListener {
 
 
     private Unbinder unbinder;
@@ -53,10 +55,14 @@ public class GalleryHeaderPageFragment extends BaseFragment {
     @BindView(R.id.txt_desc)
     TextView txt_desc;
     private Context context;
+    @BindView(R.id.lyt_imgContainer)
+    LinearLayout linearLayout;
+
 
 
     @Inject
     ViewModelFactory viewModelFactory;
+    private GalleryNewsDetailViewModel _viewmodel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -89,13 +95,30 @@ public class GalleryHeaderPageFragment extends BaseFragment {
             fragCount = args.getInt(ARGS_INSTANCE);
             newsID = args.getString("news_id");
         }
+
+        linearLayout.setOnClickListener(v1 -> {
+            if (viewmodel.getNews().getValue() != null){
+                onGalleryClick(viewmodel.getNews().getValue().files);
+            }
+
+        });
+
         return v;
+    }
+
+    @Override
+    public void onGalleryClick(List<Files> files) {
+        _viewmodel.setFiles(files);
+        if (mFragmentNavigation != null) {
+            mFragmentNavigation.pushFragment(GalleryNewsDetailFragment.newInstance(fragCount + 1));
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewmodel = ViewModelProviders.of(this,viewModelFactory).get(GalleryHeaderPageViewModel.class);
+        _viewmodel = ViewModelProviders.of(getActivity(),viewModelFactory).get(GalleryNewsDetailViewModel.class);
         try {
             Log.d( "------onViewCreated: ",newsID);
         }catch (Exception e){
@@ -162,4 +185,6 @@ public class GalleryHeaderPageFragment extends BaseFragment {
             unbinder = null;
         }
     }
+
+
 }
