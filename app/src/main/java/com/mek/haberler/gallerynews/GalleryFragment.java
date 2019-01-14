@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,7 +91,6 @@ public class GalleryFragment extends BaseFragment implements NewsSelectedListene
 
 
         recyclerView.setAdapter(new GalleryFragmentAdapter(viewmodel,this,this));
-        //recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
 
         observeViewModel();

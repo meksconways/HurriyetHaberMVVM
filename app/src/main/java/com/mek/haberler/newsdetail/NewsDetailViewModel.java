@@ -21,8 +21,13 @@ public class NewsDetailViewModel extends ViewModel {
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private MutableLiveData<Boolean> detailError = new MutableLiveData<>();
     private MutableLiveData<String> newsId = new MutableLiveData<>();
+    private MutableLiveData<Integer> scrollYPos = new MutableLiveData<>(0);
     private Call<NewsDetailModel> detailCall;
 
+
+    void setScrollYPos(Integer pos){
+        scrollYPos.setValue(pos);
+    }
 
     @Inject
     NewsDetailViewModel(NewsService newsService){
@@ -73,6 +78,9 @@ public class NewsDetailViewModel extends ViewModel {
         }
     }
 
+    LiveData<Integer> getScrollY(){
+        return scrollYPos;
+    }
     LiveData<NewsDetailModel> getDetail(){
         return detail;
     }

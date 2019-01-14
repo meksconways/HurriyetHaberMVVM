@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -55,6 +56,8 @@ public class NewsDetailFragment extends BaseFragment {
     TextView txt_newsDate;
     @BindView(R.id.txt_news_desc)
     TextView txt_newsDesc;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
     private Unbinder unbinder;
     private NewsDetailViewModel viewmodel;
@@ -97,6 +100,8 @@ public class NewsDetailFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewmodel = ViewModelProviders.of(this,viewModelFactory).get(NewsDetailViewModel.class);
+        //noinspection ConstantConditions
+        scrollView.setScrollY(viewmodel.getScrollY().getValue());
         if (newsID != null){
             viewmodel.setSelectedNews(newsID);
         }
@@ -155,6 +160,7 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        viewmodel.setScrollYPos(scrollView.getScrollY());
         if (unbinder != null) {
             unbinder.unbind();
             unbinder = null;
