@@ -29,7 +29,7 @@ public class NewsDetailViewModel extends ViewModel {
         this.newsService = newsService;
     }
 
-    public void setSelectedNews(String newsID){
+    void setSelectedNews(String newsID){
         if (newsId.getValue() == null){
             newsId.setValue(newsID);
             fetchDetail(newsID);
@@ -39,12 +39,10 @@ public class NewsDetailViewModel extends ViewModel {
                 fetchDetail(newsID);
             }
         }
-
-
     }
 
 
-    public void fetchDetail(String news_id) {
+    private void fetchDetail(String news_id) {
         loading.setValue(true);
         detailCall = newsService.getNewsDetail(Util.API_KEY,news_id);
         detailCall.enqueue(new Callback<NewsDetailModel>() {
@@ -84,9 +82,7 @@ public class NewsDetailViewModel extends ViewModel {
     LiveData<Boolean> isError(){
         return detailError;
     }
-    LiveData<String> getNewsId(){
-        return newsId;
-    }
+
 
 
 

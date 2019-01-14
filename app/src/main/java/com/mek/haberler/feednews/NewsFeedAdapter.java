@@ -35,11 +35,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             if (newsList != null){
                 data.addAll(newsList);
             }
-            notifyDataSetChanged(); // Todo: AutoValue Eklenince DiffUtil class kullanılacak
+            notifyDataSetChanged();
         });
         setHasStableIds(true);
 
 
+    }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override

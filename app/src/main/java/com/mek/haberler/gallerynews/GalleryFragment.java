@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.base.MyApplication;
+import com.mek.haberler.feednews.NewsSelectedListener;
+import com.mek.haberler.gallerynewsdetail.GalleryHeaderPageFragment;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.util.Util;
 import com.mek.haberler.viewmodel.ViewModelFactory;
@@ -27,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GalleryFragment extends BaseFragment {
+public class GalleryFragment extends BaseFragment implements NewsSelectedListener {
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -58,7 +60,7 @@ public class GalleryFragment extends BaseFragment {
         this.context = context;
         MyApplication.getAppComponent(context).inject(this);
     }
-
+    int fragCount;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,20 +68,30 @@ public class GalleryFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this,view);
 
         refreshLayout.setOnRefreshListener(() -> viewmodel.setRefresh(true));
-
+        Bundle args = getArguments();
+        if (args != null) {
+            fragCount = args.getInt(ARGS_INSTANCE);
+        }
         return view;
+    }
+
+    @Override
+    public void onNewsSelected(String newsID) {
+        if (mFragmentNavigation != null) {
+            mFragmentNavigation.pushFragment(GalleryHeaderPageFragment.newInstance(fragCount + 1,newsID));
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         viewmodel = ViewModelProviders.of(getActivity(),viewModelFactory).get(GalleryFrViewModel.class);
-        ((MainActivity)getActivity()).updateToolbarTitle("Haber Galeri");
-        int mNoOfColumns = Util.calculateNoOfColumns(context);
+        ((MainActivity)getActivity()).updateToolbarTitle("Fotoğraf Galerisi");
 
-        recyclerView.setAdapter(new GalleryFragmentAdapter(viewmodel,this));
+
+        recyclerView.setAdapter(new GalleryFragmentAdapter(viewmodel,this,this));
         //recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
 
         observeViewModel();
 
@@ -130,4 +142,6 @@ public class GalleryFragment extends BaseFragment {
             unbinder = null;
         }
     }
+
+
 }

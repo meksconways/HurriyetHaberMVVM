@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mek.haberler.R;
 import com.mek.haberler.feednews.NewsFeedModel.FeedNewsModel;
 import com.mek.haberler.feednews.NewsFeedModel.Files;
+import com.mek.haberler.feednews.NewsSelectedListener;
 import com.mek.haberler.gallerynews.model.GalleryNewsModel;
 
 import java.util.ArrayList;
@@ -25,8 +26,10 @@ public class GalleryFragmentAdapter extends RecyclerView.Adapter<GalleryFragment
 
 
     private final List<GalleryNewsModel> data = new ArrayList<>();
+    private final NewsSelectedListener listener;
 
-    public GalleryFragmentAdapter(GalleryFrViewModel viewModel, LifecycleOwner lifecycleOwner) {
+    public GalleryFragmentAdapter(GalleryFrViewModel viewModel, LifecycleOwner lifecycleOwner,NewsSelectedListener listener) {
+        this.listener = listener;
         viewModel.getNews().observe(lifecycleOwner, newsList -> {
             data.clear();
             if (newsList != null){
@@ -35,6 +38,7 @@ public class GalleryFragmentAdapter extends RecyclerView.Adapter<GalleryFragment
             notifyDataSetChanged();
         });
         setHasStableIds(true);
+
     }
 
     @Override
@@ -46,7 +50,7 @@ public class GalleryFragmentAdapter extends RecyclerView.Adapter<GalleryFragment
     @Override
     public GalleryFragmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gallery,parent,false);
-        return new GalleryFragmentViewHolder(view);
+        return new GalleryFragmentViewHolder(view,listener);
     }
 
     @Override
@@ -64,13 +68,21 @@ public class GalleryFragmentAdapter extends RecyclerView.Adapter<GalleryFragment
         @BindView(R.id.img_gallery)
         ImageView newsPhoto;
 
-        GalleryFragmentViewHolder(@NonNull View itemView) {
+        private GalleryNewsModel model;
+
+        GalleryFragmentViewHolder(@NonNull View itemView,NewsSelectedListener listener) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(v -> {
+                if (model != null) {
+                    listener.onNewsSelected(model.id);
+                }
+            });
 
 
         }
         void bind(GalleryNewsModel newsModel){
+            this.model = newsModel;
             if (newsModel.files.size() > 0){
                 if (newsModel.files.get(0).fileUrl != null){
                     Glide.with(newsPhoto.getContext())
