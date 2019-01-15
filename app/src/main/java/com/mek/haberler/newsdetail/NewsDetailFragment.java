@@ -5,9 +5,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -87,6 +89,8 @@ public class NewsDetailFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.lay_news_detail,container,false);
         unbinder = ButterKnife.bind(this,view);
+        setHasOptionsMenu(true);
+
         Bundle args = getArguments();
         if (args != null) {
             fragCount = args.getInt(ARGS_INSTANCE);
@@ -106,11 +110,59 @@ public class NewsDetailFragment extends BaseFragment {
             viewmodel.setSelectedNews(newsID);
         }
         observeViewModel();
+
         //noinspection ConstantConditions
         ((MainActivity)getActivity()).updateToolbarTitle("Haber Detay");
     }
 
 
+    private Menu menu;
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        this.menu = menu;
+        inflater.inflate(R.menu.menu_news_detail, menu);
+        hideOption(R.id.removeNews);
+        super.onCreateOptionsMenu(menu,inflater);
+
+
+    }
+
+
+    private void hideOption(int id)
+    {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(false);
+    }
+
+    private void showOption(int id)
+    {
+        MenuItem item = menu.findItem(id);
+        item.setVisible(true);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.removeNews:
+                viewmodel.deleteFromRoom();
+                hideOption(R.id.removeNews);
+                showOption(R.id.addNews);
+
+                return true;
+            case R.id.addNews:
+                viewmodel.saveToRoom();
+                hideOption(R.id.addNews);
+                showOption(R.id.removeNews);
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void observeViewModel() {
 

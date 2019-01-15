@@ -6,6 +6,7 @@ import com.mek.haberler.gallerynewsdetail.GalleryHeaderPageFragment;
 import com.mek.haberler.gallerynewsdetail.GalleryNewsDetailFragment;
 import com.mek.haberler.networking.NetworkModule;
 import com.mek.haberler.newsdetail.NewsDetailFragment;
+import com.mek.haberler.roomdb.RoomModule;
 import com.mek.haberler.viewmodel.ViewModelModule;
 
 import javax.inject.Singleton;
@@ -15,9 +16,13 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         NetworkModule.class,
-        ViewModelModule.class
+        ViewModelModule.class,
+        RoomModule.class,
+        ApplicationModule.class
 })
 public interface ApplicationComponent {
+
+
 
     void inject(NewsFeedFragment newsFeedFragment);
 

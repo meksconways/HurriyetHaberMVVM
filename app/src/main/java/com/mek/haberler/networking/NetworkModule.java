@@ -22,6 +22,8 @@ public abstract class NetworkModule {
 
     }
 
+
+
     @Provides
     @Singleton
     static NewsService provideNewsService(Retrofit retrofit){

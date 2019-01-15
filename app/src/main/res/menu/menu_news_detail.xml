@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/removeNews"
+        android:icon="@drawable/ic_bookmark"
+        android:title=""
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/addNews"
+        android:icon="@drawable/ic_bookmark_notchecked"
+        android:title=""
+        app:showAsAction="always"
+        />
+
+</menu>

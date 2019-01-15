@@ -12,7 +12,9 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         component = DaggerApplicationComponent
-                .create();
+                .builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
     }
 
     public static ApplicationComponent getAppComponent(Context context){

@@ -1,7 +1,13 @@
 package com.mek.haberler.newsdetail;
 
+import android.app.Application;
+
+import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.newsdetail.model.NewsDetailModel;
+import com.mek.haberler.roomdb.AppDatabase;
+import com.mek.haberler.roomdb.NewsDB;
+import com.mek.haberler.roomdb.NewsDao;
 import com.mek.haberler.util.Util;
 
 import javax.inject.Inject;
@@ -17,6 +23,7 @@ public class NewsDetailViewModel extends ViewModel {
 
 
     private final NewsService newsService;
+    private final NewsDao newsDao;
     private MutableLiveData<NewsDetailModel> detail = new MutableLiveData<>();
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
     private MutableLiveData<Boolean> detailError = new MutableLiveData<>();
@@ -25,14 +32,47 @@ public class NewsDetailViewModel extends ViewModel {
     private Call<NewsDetailModel> detailCall;
 
 
+
+    void saveToRoom(){
+        NewsDB newsDB = new NewsDB();
+        //noinspection ConstantConditions
+        newsDB.setNewsId(detail.getValue().id);
+        newsDB.setCreatedDate(detail.getValue().createdDate);
+        newsDB.setDescription(detail.getValue().description);
+        newsDB.setEditor(detail.getValue().editor);
+        newsDB.setSubTitle(detail.getValue().subTitle);
+        newsDB.setTitle(detail.getValue().title);
+        new Thread(() -> {
+            newsDao.insertNewsfromRoom(newsDB);
+        }).start();
+
+    }
+
+    void deleteFromRoom(){
+        NewsDB newsDB = new NewsDB();
+        //noinspection ConstantConditions
+        newsDB.setNewsId(detail.getValue().id);
+        newsDB.setCreatedDate(detail.getValue().createdDate);
+        newsDB.setDescription(detail.getValue().description);
+        newsDB.setEditor(detail.getValue().editor);
+        newsDB.setSubTitle(detail.getValue().subTitle);
+        newsDB.setTitle(detail.getValue().title);
+        new Thread(() -> {
+            newsDao.deleteNewsfromRoom(newsDB);
+        }).start();
+    }
+
     void setScrollYPos(Integer pos){
         scrollYPos.setValue(pos);
     }
 
     @Inject
-    NewsDetailViewModel(NewsService newsService){
+    NewsDetailViewModel(NewsService newsService, NewsDao newsDao){
         this.newsService = newsService;
+        this.newsDao = newsDao;
     }
+
+
 
     void setSelectedNews(String newsID){
         if (newsId.getValue() == null){

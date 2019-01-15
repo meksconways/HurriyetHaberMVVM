@@ -1,6 +1,7 @@
 package com.mek.haberler.home;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -47,6 +48,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -73,7 +79,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
         fragmentHistory = new FragmentHistory();
 
         setSupportActionBar(toolbar);
-
         mNavController = FragNavController.newBuilder(savedInstanceState,
                 getSupportFragmentManager(),
                 R.id.screen_container)

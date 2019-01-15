@@ -79,7 +79,7 @@ public class GalleryNewsDetailFragment extends BaseFragment {
         startSnapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(new GalleryNewsDetailAdapter(viewmodel,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-//noinspection ConstantConditions
+        //noinspection ConstantConditions
         ((MainActivity)getActivity()).updateToolbarTitle("Galeri");
         observeViewModel();
 
