@@ -11,7 +11,7 @@ import com.mek.haberler.base.BaseActivity;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.feednews.NewsFeedFragment;
 import com.mek.haberler.feednews.NewsFeedViewModel;
-import com.mek.haberler.fragment.BookmarkFragment;
+import com.mek.haberler.readlaterpage.ReadLaterFragment;
 import com.mek.haberler.gallerynews.GalleryFrViewModel;
 import com.mek.haberler.gallerynews.GalleryFragment;
 import com.mek.haberler.fragment.VideoFragment;
@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
             case FragNavController.TAB4:
                 return new WriterFragment();
             case FragNavController.TAB5:
-                return new BookmarkFragment();
+                return new ReadLaterFragment();
 
 
         }

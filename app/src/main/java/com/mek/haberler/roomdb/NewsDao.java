@@ -3,6 +3,7 @@ package com.mek.haberler.roomdb;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -23,9 +24,5 @@ public interface NewsDao {
 
     @Delete
     void deleteNewsfromRoom(NewsDB news);
-
-
-
-
 
 }

@@ -5,6 +5,7 @@ import com.mek.haberler.gallerynews.GalleryFrViewModel;
 import com.mek.haberler.gallerynewsdetail.GalleryHeaderPageViewModel;
 import com.mek.haberler.gallerynewsdetail.GalleryNewsDetailViewModel;
 import com.mek.haberler.newsdetail.NewsDetailViewModel;
+import com.mek.haberler.readlaterpage.ReadLaterFragmentViewModel;
 
 import androidx.lifecycle.ViewModel;
 import dagger.Binds;
@@ -38,5 +39,10 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(GalleryNewsDetailViewModel.class)
     abstract ViewModel bindGallerynewsDetailViewModel(GalleryNewsDetailViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ReadLaterFragmentViewModel.class)
+    abstract ViewModel bindReadLaterFragmentViewModel(ReadLaterFragmentViewModel viewModel);
 
 }

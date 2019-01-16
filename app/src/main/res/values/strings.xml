@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Haberler</string>
     <string name="api_error">Hürriyet Haberle İlgili Bağlantı Kurulamadı</string>
+    <string name="empty_read_later">Okuma Listeniz Boş Görünüyor</string>
 
     <array name="tab_name">
         <item>Haberler</item>

@@ -42,6 +42,9 @@ public class NewsDetailViewModel extends ViewModel {
         newsDB.setEditor(detail.getValue().editor);
         newsDB.setSubTitle(detail.getValue().subTitle);
         newsDB.setTitle(detail.getValue().title);
+        if (detail.getValue().files.size() > 0){
+            newsDB.setPhoto(detail.getValue().files.get(0).fileUrl);
+        }
         new Thread(() -> {
             newsDao.insertNewsfromRoom(newsDB);
         }).start();
@@ -57,9 +60,10 @@ public class NewsDetailViewModel extends ViewModel {
         newsDB.setEditor(detail.getValue().editor);
         newsDB.setSubTitle(detail.getValue().subTitle);
         newsDB.setTitle(detail.getValue().title);
-        new Thread(() -> {
-            newsDao.deleteNewsfromRoom(newsDB);
-        }).start();
+        if (detail.getValue().files.size() > 0){
+            newsDB.setPhoto(detail.getValue().files.get(0).fileUrl);
+        }
+        new Thread(() -> newsDao.deleteNewsfromRoom(newsDB)).start();
     }
 
     void setScrollYPos(Integer pos){

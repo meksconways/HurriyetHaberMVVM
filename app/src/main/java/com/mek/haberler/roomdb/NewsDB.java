@@ -3,6 +3,7 @@ package com.mek.haberler.roomdb;
 import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -25,6 +26,17 @@ public class NewsDB {
     @ColumnInfo(name = "Text")
     private String description;
 
+
+    @ColumnInfo(name = "photo")
+    private String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public void setNewsId(String newsId) {
         this.newsId = newsId;
