@@ -7,12 +7,14 @@
         android:id="@+id/removeNews"
         android:icon="@drawable/ic_bookmark"
         android:title=""
+        android:visible="false"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/addNews"
         android:icon="@drawable/ic_bookmark_notchecked"
         android:title=""
+        android:visible="false"
         app:showAsAction="always"
         />
 

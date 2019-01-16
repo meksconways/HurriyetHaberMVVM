@@ -121,7 +121,8 @@ public class NewsDetailFragment extends BaseFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         this.menu = menu;
         inflater.inflate(R.menu.menu_news_detail, menu);
-        hideOption(R.id.removeNews);
+//        hideOption(R.id.removeNews);
+//        hideOption(R.id.addNews);
         super.onCreateOptionsMenu(menu,inflater);
 
 
@@ -130,14 +131,29 @@ public class NewsDetailFragment extends BaseFragment {
 
     private void hideOption(int id)
     {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(false);
+        try {
+            MenuItem item = menu.findItem(id);
+            if (item != null) {
+                item.setVisible(false);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void showOption(int id)
     {
-        MenuItem item = menu.findItem(id);
-        item.setVisible(true);
+        try {
+            MenuItem item = menu.findItem(id);
+            if (item != null) {
+                item.setVisible(true);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -166,6 +182,17 @@ public class NewsDetailFragment extends BaseFragment {
 
     private void observeViewModel() {
 
+        viewmodel.getIsInDB().observe(this, isInDB -> {
+
+            if (isInDB){
+                showOption(R.id.removeNews);
+                hideOption(R.id.addNews);
+            }else {
+                showOption(R.id.addNews);
+                hideOption(R.id.removeNews);
+            }
+
+        });
         viewmodel.isLoading().observe(this, isLoading -> {
             progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             if (isLoading){

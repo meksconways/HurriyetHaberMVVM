@@ -38,7 +38,7 @@ public class ReadLaterFragmentViewModel extends ViewModel {
     }
 
 
-    final List<NewsDB> newsDBList = new ArrayList<>();
+    private final List<NewsDB> newsDBList = new ArrayList<>();
 
     void updateStates(List<NewsDB> newsDBList){
         news.setValue(newsDBList);

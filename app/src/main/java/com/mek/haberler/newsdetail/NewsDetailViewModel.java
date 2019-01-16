@@ -1,11 +1,10 @@
 package com.mek.haberler.newsdetail;
 
-import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.newsdetail.model.NewsDetailModel;
-import com.mek.haberler.roomdb.AppDatabase;
 import com.mek.haberler.roomdb.NewsDB;
 import com.mek.haberler.roomdb.NewsDao;
 import com.mek.haberler.util.Util;
@@ -24,12 +23,36 @@ public class NewsDetailViewModel extends ViewModel {
 
     private final NewsService newsService;
     private final NewsDao newsDao;
-    private MutableLiveData<NewsDetailModel> detail = new MutableLiveData<>();
-    private MutableLiveData<Boolean> loading = new MutableLiveData<>();
-    private MutableLiveData<Boolean> detailError = new MutableLiveData<>();
-    private MutableLiveData<String> newsId = new MutableLiveData<>();
-    private MutableLiveData<Integer> scrollYPos = new MutableLiveData<>(0);
+    private final MutableLiveData<NewsDetailModel> detail = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> detailError = new MutableLiveData<>();
+    private final MutableLiveData<String> newsId = new MutableLiveData<>();
+    private final MutableLiveData<Integer> scrollYPos = new MutableLiveData<>(0);
     private Call<NewsDetailModel> detailCall;
+    private final MutableLiveData<Boolean> newsFromDB = new MutableLiveData<>();
+
+
+
+
+    private NewsDB newsDB;
+
+    void isInDB(){
+
+        new Thread(() -> {
+            newsDB = newsDao.getNewsDetailfromRoom(newsId.getValue());
+            new Handler(Looper.getMainLooper()).post(() -> updateState(newsDB));
+        }).start();
+
+    }
+
+    void updateState(NewsDB newsDB){
+
+        if (newsDB != null){
+            newsFromDB.setValue(true);
+        }else{
+            newsFromDB.setValue(false);
+        }
+    }
 
 
 
@@ -93,6 +116,7 @@ public class NewsDetailViewModel extends ViewModel {
 
     private void fetchDetail(String news_id) {
         loading.setValue(true);
+
         detailCall = newsService.getNewsDetail(Util.API_KEY,news_id);
         detailCall.enqueue(new Callback<NewsDetailModel>() {
             @Override
@@ -102,6 +126,7 @@ public class NewsDetailViewModel extends ViewModel {
                     detail.setValue(response.body());
                     loading.setValue(false);
                     detailCall = null;
+                    isInDB();
                 }
             }
 
@@ -122,6 +147,9 @@ public class NewsDetailViewModel extends ViewModel {
         }
     }
 
+    LiveData<Boolean> getIsInDB(){
+        return newsFromDB;
+    }
     LiveData<Integer> getScrollY(){
         return scrollYPos;
     }
