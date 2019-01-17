@@ -10,13 +10,12 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="H,16:9"
             android:scaleType="centerCrop"
             android:background="#d9d9d9"
             android:id="@+id/img_gallery"
@@ -28,14 +27,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/fab_transformation_scrim_behavior"
             android:textSize="16sp"
-            android:layout_margin="16sp"
             android:textColor="#212121"
             android:id="@+id/txt_desc"
             />

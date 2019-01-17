@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -91,7 +92,7 @@ public class GalleryFragment extends BaseFragment implements NewsSelectedListene
 
 
         recyclerView.setAdapter(new GalleryFragmentAdapter(viewmodel,this,this));
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
 
         observeViewModel();
 
