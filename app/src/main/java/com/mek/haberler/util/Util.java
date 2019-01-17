@@ -15,12 +15,19 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.mek.haberler.R;
+
 import java.util.HashMap;
 
+import androidx.annotation.IdRes;
 import androidx.core.content.ContextCompat;
 
 public class Util {
@@ -37,6 +44,26 @@ public class Util {
     *
     * */
     public static String BASE_URL = "https://api.hurriyet.com.tr/v1/";
+
+    public static void showBadge(Context context, BottomNavigationView
+            bottomNavigationView, @IdRes int itemId, String value) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
+        View badge = LayoutInflater.from(context).inflate(R.layout.layout_news_badge, bottomNavigationView, false);
+
+        TextView text = badge.findViewById(R.id.badge_text_view);
+        text.setText(value);
+        itemView.addView(badge);
+    }
+
+    public static void removeBadge(BottomNavigationView bottomNavigationView, @IdRes int itemId) {
+        BottomNavigationItemView itemView = bottomNavigationView.findViewById(itemId);
+        if (itemView.getChildCount() == 3) {
+            itemView.removeViewAt(2);
+        }
+    }
+
+
+
     public static final void showToast(Context context, String message) {
 
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

@@ -5,9 +5,12 @@ import android.os.Looper;
 
 import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.newsdetail.model.NewsDetailModel;
+import com.mek.haberler.readlaterpage.ReadLaterFragmentViewModel;
 import com.mek.haberler.roomdb.NewsDB;
 import com.mek.haberler.roomdb.NewsDao;
 import com.mek.haberler.util.Util;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -30,6 +33,7 @@ public class NewsDetailViewModel extends ViewModel {
     private final MutableLiveData<Integer> scrollYPos = new MutableLiveData<>(0);
     private Call<NewsDetailModel> detailCall;
     private final MutableLiveData<Boolean> newsFromDB = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> needRefreshReadLater = new MutableLiveData<>(false);
 
 
 
@@ -43,6 +47,10 @@ public class NewsDetailViewModel extends ViewModel {
             new Handler(Looper.getMainLooper()).post(() -> updateState(newsDB));
         }).start();
 
+    }
+
+    void setNeedRefreshReadLater(Boolean data){
+        needRefreshReadLater.setValue(data);
     }
 
     void updateState(NewsDB newsDB){
@@ -65,11 +73,13 @@ public class NewsDetailViewModel extends ViewModel {
         newsDB.setEditor(detail.getValue().editor);
         newsDB.setSubTitle(detail.getValue().subTitle);
         newsDB.setTitle(detail.getValue().title);
+        newsDB.setDate(Calendar.getInstance().getTimeInMillis());
         if (detail.getValue().files.size() > 0){
             newsDB.setPhoto(detail.getValue().files.get(0).fileUrl);
         }
         new Thread(() -> {
             newsDao.insertNewsfromRoom(newsDB);
+            new Handler(Looper.getMainLooper()).post(() -> needRefreshReadLater.setValue(true));
         }).start();
 
     }
@@ -83,10 +93,15 @@ public class NewsDetailViewModel extends ViewModel {
         newsDB.setEditor(detail.getValue().editor);
         newsDB.setSubTitle(detail.getValue().subTitle);
         newsDB.setTitle(detail.getValue().title);
+        newsDB.setDate(Calendar.getInstance().getTimeInMillis());
         if (detail.getValue().files.size() > 0){
             newsDB.setPhoto(detail.getValue().files.get(0).fileUrl);
         }
-        new Thread(() -> newsDao.deleteNewsfromRoom(newsDB)).start();
+        new Thread(() -> {
+            newsDao.deleteNewsfromRoom(newsDB);
+            new Handler(Looper.getMainLooper()).post(() -> needRefreshReadLater.setValue(true));
+        }).start();
+
     }
 
     void setScrollYPos(Integer pos){
@@ -97,6 +112,7 @@ public class NewsDetailViewModel extends ViewModel {
     NewsDetailViewModel(NewsService newsService, NewsDao newsDao){
         this.newsService = newsService;
         this.newsDao = newsDao;
+
     }
 
 
@@ -147,6 +163,9 @@ public class NewsDetailViewModel extends ViewModel {
         }
     }
 
+    LiveData<Boolean> getNeedRefreshReadLater(){
+        return needRefreshReadLater;
+    }
     LiveData<Boolean> getIsInDB(){
         return newsFromDB;
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.base.MyApplication;
 import com.mek.haberler.home.MainActivity;
+import com.mek.haberler.readlaterpage.ReadLaterFragmentViewModel;
 import com.mek.haberler.util.Util;
 import com.mek.haberler.viewmodel.ViewModelFactory;
 
@@ -67,6 +69,7 @@ public class NewsDetailFragment extends BaseFragment {
 
     @Inject
     ViewModelFactory viewModelFactory;
+    private ReadLaterFragmentViewModel _viewmodel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -104,6 +107,7 @@ public class NewsDetailFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewmodel = ViewModelProviders.of(this,viewModelFactory).get(NewsDetailViewModel.class);
+        _viewmodel = ViewModelProviders.of(getActivity(),viewModelFactory).get(ReadLaterFragmentViewModel.class);
         //noinspection ConstantConditions
         scrollView.setScrollY(viewmodel.getScrollY().getValue());
         if (newsID != null){
@@ -123,6 +127,9 @@ public class NewsDetailFragment extends BaseFragment {
         inflater.inflate(R.menu.menu_news_detail, menu);
 //        hideOption(R.id.removeNews);
 //        hideOption(R.id.addNews);
+
+
+
         super.onCreateOptionsMenu(menu,inflater);
 
 
@@ -181,7 +188,6 @@ public class NewsDetailFragment extends BaseFragment {
     }
 
     private void observeViewModel() {
-
         viewmodel.getIsInDB().observe(this, isInDB -> {
 
             if (isInDB){
@@ -193,6 +199,17 @@ public class NewsDetailFragment extends BaseFragment {
             }
 
         });
+        viewmodel.getNeedRefreshReadLater().observe(this, needRefresh -> {
+            if (needRefresh){
+                if (getActivity() != null){
+                    ((MainActivity)getActivity()).showBadge();
+                }
+                _viewmodel.fetchData();
+                viewmodel.setNeedRefreshReadLater(false);
+
+            }
+        });
+
         viewmodel.isLoading().observe(this, isLoading -> {
             progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             if (isLoading){

@@ -45,7 +45,7 @@ public class NewsFeedAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHold
                 notifyDataSetChanged();
                 return;
             }
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new FeedNewsDiffCallback(data,newsList),true);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new FeedNewsDiffCallback(data,newsList));
             data.clear();
             data.addAll(newsList);
             diffResult.dispatchUpdatesTo(this);

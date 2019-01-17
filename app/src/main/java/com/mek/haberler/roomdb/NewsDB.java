@@ -2,6 +2,9 @@ package com.mek.haberler.roomdb;
 
 import android.graphics.Bitmap;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
@@ -25,7 +28,16 @@ public class NewsDB {
     private String editor;
     @ColumnInfo(name = "Text")
     private String description;
+    @ColumnInfo(name = "date_now")
+    private Long date;
 
+    public Long getDate() {
+        return date;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
+    }
 
     @ColumnInfo(name = "photo")
     private String photo;

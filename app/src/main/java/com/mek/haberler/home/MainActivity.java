@@ -18,6 +18,7 @@ import com.mek.haberler.fragment.VideoFragment;
 import com.mek.haberler.fragment.WriterFragment;
 import com.mek.haberler.util.FragNavController;
 import com.mek.haberler.util.FragmentHistory;
+import com.mek.haberler.util.Util;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -46,6 +47,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
     private FragmentHistory fragmentHistory;
     MenuItem prevMenuItem;
 
+
+    public void showBadge(){
+        Util.showBadge(this,bottomTabLayout,R.id.act5,"");
+    }
+    public void hideBadge(){
+        Util.removeBadge(bottomTabLayout,R.id.act5);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,8 +179,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.FragmentN
 
     private void switchTab(int position) {
         mNavController.switchTab(position);
-
-
     }
 
     @Override

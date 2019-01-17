@@ -12,7 +12,7 @@ import androidx.room.Query;
 @Dao
 public interface NewsDao {
 
-    @Query("SELECT * FROM news_db")
+    @Query("SELECT * FROM news_db ORDER BY date_now DESC")
     //LiveData<List<NewsDB>> getAllNewsFromRoom();
     List<NewsDB> getAllNewsfromRoom();
 

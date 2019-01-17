@@ -19,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +33,16 @@ public class ReadLaterAdapter extends RecyclerView.Adapter<ReadLaterAdapter.Read
     ReadLaterAdapter(ReadLaterFragmentViewModel viewModel, LifecycleOwner lifecycleOwner, NewsSelectedListener listener) {
         this.listener = listener;
         viewModel.getNews().observe(lifecycleOwner, newsDBS -> {
-            data.clear();
-            if (newsDBS != null) {
-                data.addAll(newsDBS);
 
+            if (newsDBS == null){
+                data.clear();
+                notifyDataSetChanged();
+                return;
             }
-            notifyDataSetChanged();
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ReadLaterDiffCallback(data,newsDBS));
+            data.clear();
+            data.addAll(newsDBS);
+            diffResult.dispatchUpdatesTo(this);
         });
         setHasStableIds(true);
     }

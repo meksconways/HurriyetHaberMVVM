@@ -58,9 +58,10 @@ public class ReadLaterFragment extends BaseFragment implements NewsSelectedListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewmodel = ViewModelProviders.of(this,factory).get(ReadLaterFragmentViewModel.class);
+        viewmodel = ViewModelProviders.of(getActivity(),factory).get(ReadLaterFragmentViewModel.class);
         //noinspection ConstantConditions
         ((MainActivity)getActivity()).updateToolbarTitle("Sonra Oku");
+        ((MainActivity)getActivity()).hideBadge();
         recyclerView.setAdapter(new ReadLaterAdapter(viewmodel,this,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         observeViewModel();

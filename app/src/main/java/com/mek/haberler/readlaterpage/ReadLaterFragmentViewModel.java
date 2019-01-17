@@ -2,6 +2,7 @@ package com.mek.haberler.readlaterpage;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.mek.haberler.roomdb.NewsDB;
 import com.mek.haberler.roomdb.NewsDao;
@@ -53,8 +54,9 @@ public class ReadLaterFragmentViewModel extends ViewModel {
         }
     }
 
-    private void fetchData() {
-
+    public void fetchData() {
+        Log.d( "fetchData: ","girdi ***");
+        newsDBList.clear();
         new Thread(() -> {
           newsDBList.addAll(newsDao.getAllNewsfromRoom());
             new Handler(Looper.getMainLooper()).post(() -> updateStates(newsDBList));
