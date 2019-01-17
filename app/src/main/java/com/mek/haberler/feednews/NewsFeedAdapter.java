@@ -18,54 +18,122 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
+public class NewsFeedAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private final List<FeedNewsModel> data = new ArrayList<>();
     private final NewsSelectedListener listener;
+    NewsFeedViewModel viewModel;
+    int type_cat = 0;
+    int type_news = 1;
+    LifecycleOwner owner;
 
     NewsFeedAdapter(NewsFeedViewModel viewModel, LifecycleOwner lifecycleOwner, NewsSelectedListener listener){
+        this.viewModel = viewModel;
+        this.owner = lifecycleOwner;
         this.listener = listener;
         viewModel.getNews().observe(lifecycleOwner, newsList -> {
-            data.clear();
-            if (newsList != null){
-                data.addAll(newsList);
+
+            if (newsList == null){
+                data.clear();
+                notifyDataSetChanged();
+                return;
             }
-            notifyDataSetChanged();
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new FeedNewsDiffCallback(data,newsList),true);
+            data.clear();
+            data.addAll(newsList);
+            diffResult.dispatchUpdatesTo(this);
         });
+
         setHasStableIds(true);
 
 
     }
     @Override
     public int getItemViewType(int position) {
-        return position;
+        if (position == 0){
+            return type_cat;
+        }else{
+            return type_news;
+        }
     }
 
     @Override
     public long getItemId(int position) {
-        return Long.parseLong(data.get(position).id);
+        if (position == 0){
+            return 0;
+        }else{
+            return Long.parseLong(data.get(position - 1).id);
+        }
+
     }
+
+
 
     @NonNull
     @Override
-    public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default_news_card,parent,false);
-        return new NewsViewHolder(view,listener);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        if (viewType == type_cat){
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cat_rv,parent,false);
+            return new CategoryViewHolder(view);
+
+        }else{
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default_news_card,parent,false);
+            return new NewsViewHolder(view,listener);
+        }
+
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, int position) {
-        newsViewHolder.bind(data.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+        if (holder.getItemViewType() == type_cat){
+
+            CategoryViewHolder holder1 = (CategoryViewHolder)holder;
+            holder1.bind();
+            holder1.recyclerView.setAdapter(new CategoryAdapter(viewModel,owner));
+            holder1.recyclerView.setLayoutManager(new LinearLayoutManager(holder1.recyclerView.getContext(),
+                    LinearLayoutManager.HORIZONTAL, false));
+            viewModel.setCatModel(false);
+
+
+
+
+
+        }else{
+            NewsViewHolder holder0 = (NewsViewHolder)holder;
+            holder0.bind(data.get(position - 1));
+        }
+
     }
+
 
     @Override
     public int getItemCount() {
-        return data.size();
+       return data.size() + 1;
+    }
+
+    static final class CategoryViewHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.rv_cat)
+        RecyclerView recyclerView;
+
+        CategoryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this,itemView);
+        }
+        void bind(){
+            Log.d( "observeViewModel: ", "girdi");
+        }
     }
 
     static final class NewsViewHolder extends RecyclerView.ViewHolder{

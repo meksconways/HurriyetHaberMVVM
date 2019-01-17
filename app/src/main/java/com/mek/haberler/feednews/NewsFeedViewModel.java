@@ -1,6 +1,7 @@
 package com.mek.haberler.feednews;
 
 import com.mek.haberler.feednews.NewsFeedModel.FeedNewsModel;
+import com.mek.haberler.feednews.categorymodel.CategoryModel;
 import com.mek.haberler.networking.NewsService;
 import com.mek.haberler.util.Util;
 
@@ -24,8 +25,17 @@ public class NewsFeedViewModel extends ViewModel {
     private final MutableLiveData<Boolean> scrollToTop = new MutableLiveData<>();
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>(false);
     private final NewsService newsService;
+    private final MutableLiveData<List<CategoryModel>> catModel = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> fillCategories = new MutableLiveData<>(true);
     private Call<List<FeedNewsModel>> newsCall;
 
+    void setCat(List<CategoryModel> categoryModel){
+        catModel.setValue(categoryModel);
+    }
+
+    void setCatModel(Boolean data){
+        fillCategories.setValue(data);
+    }
 
     public void setScroll(Boolean data){
         scrollToTop.setValue(data);
@@ -37,6 +47,12 @@ public class NewsFeedViewModel extends ViewModel {
         fetchNews();
     }
 
+    LiveData<List<CategoryModel>> getCategories(){
+        return catModel;
+    }
+    LiveData<Boolean> getFillCategories(){
+        return fillCategories;
+    }
     LiveData<Boolean> getRefresh(){
         return refresh;
     }

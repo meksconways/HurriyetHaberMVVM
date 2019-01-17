@@ -2,6 +2,7 @@ package com.mek.haberler.feednews;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,13 @@ import android.widget.TextView;
 import com.mek.haberler.R;
 import com.mek.haberler.base.BaseFragment;
 import com.mek.haberler.base.MyApplication;
+import com.mek.haberler.feednews.categorymodel.CategoryModel;
 import com.mek.haberler.home.MainActivity;
 import com.mek.haberler.newsdetail.NewsDetailFragment;
 import com.mek.haberler.viewmodel.ViewModelFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -102,6 +107,8 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
         recyclerView.setAdapter(new NewsFeedAdapter(viewmodel,this,this));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+
+
         //noinspection ConstantConditions
         ((MainActivity)getActivity()).updateToolbarTitle("Hürriyet Haber");
 
@@ -113,6 +120,14 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
     * noinspection ConstantConditions yazmamızın sebebi bool veri tipinin asla null olmayacağıdır
     * */
     private void observeViewModel() {
+        viewmodel.getFillCategories().observe(this, fillCat -> {
+
+            if(fillCat){
+                fillCategories();
+                viewmodel.setCatModel(false);
+            }
+        });
+
         viewmodel.getError().observe(this, isError -> {
             //noinspection ConstantConditions
             if (isError){
@@ -157,6 +172,29 @@ public class NewsFeedFragment extends BaseFragment implements NewsSelectedListen
 
             }
         });
+    }
+
+    private List<CategoryModel> categoryModel = new ArrayList<>();
+
+    private void fillCategories() {
+        int p1 = this.getResources().getIdentifier("cat_dunya", "drawable", context.getPackageName());
+        int p2 = this.getResources().getIdentifier("cat_gundem", "drawable", context.getPackageName());
+        int p3 = this.getResources().getIdentifier("cat_spor", "drawable", context.getPackageName());
+        int p4 = this.getResources().getIdentifier("cat_ekonomi", "drawable", context.getPackageName());
+        int p5 = this.getResources().getIdentifier("cat_avrupa", "drawable", context.getPackageName());
+        int p6 = this.getResources().getIdentifier("cat_magazin", "drawable", context.getPackageName());
+        int p7 = this.getResources().getIdentifier("cat_egitim", "drawable", context.getPackageName());
+
+        categoryModel.add(new CategoryModel("Dünya",p1,"/dunya/"));
+        categoryModel.add(new CategoryModel("Gündem",p2,"/gundem/"));
+        categoryModel.add(new CategoryModel("Spor",p3,"/sporarena/"));
+        categoryModel.add(new CategoryModel("Ekonomi",p4,"/ekonomi/"));
+        categoryModel.add(new CategoryModel("Avrupa",p5,"/avrupa/"));
+        categoryModel.add(new CategoryModel("Magazin",p6,"/magazin-haberleri/"));
+        categoryModel.add(new CategoryModel("Eğitim",p7,"/egitim/"));
+
+        viewmodel.setCat(categoryModel);
+
     }
 
     @Override
